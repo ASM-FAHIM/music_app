@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../model/song_model.dart';
+import '../widget/section_header.dart';
+import '../widget/song_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    List<Song> songs = Song.songs;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -20,18 +22,22 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: _CustomAppBar(),
-        bottomNavigationBar: _CustomBottomNavigationBar(),
+        appBar: const _CustomAppBar(),
+        bottomNavigationBar: const _CustomBottomNavigationBar(),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              _DiscoverMusic(),
-              Column(
-                children: [
-                  SectionHeader(
-                    title: 'Trading Music',
-                  )
-                ],
+              const _DiscoverMusic(),
+              _TrendingMusic(songs: songs),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    const SectionHeader(title: 'Playlist'),
+                    ListView.builder(
+                        itemCount: 5, itemBuilder: (context, index) {})
+                  ],
+                ),
               )
             ],
           ),
@@ -41,29 +47,40 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class SectionHeader extends StatelessWidget {
-  const SectionHeader({
+class _TrendingMusic extends StatelessWidget {
+  const _TrendingMusic({
     Key? key,
-    required this.title,
-    this.action = 'View more',
+    required this.songs,
   }) : super(key: key);
-  final String title;
-  final String action;
+
+  final List<Song> songs;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .headline6!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        Text(action, style: Theme.of(context).textTheme.bodyLarge),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: SectionHeader(
+              title: 'Trading Music',
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.32,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: songs.length,
+                itemBuilder: (context, index) {
+                  return SongCard(song: songs[index]);
+                }),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -135,7 +152,7 @@ class _CustomBottomNavigationBar extends StatelessWidget {
       unselectedItemColor: Colors.white,
       showSelectedLabels: false,
       showUnselectedLabels: false,
-      items: [
+      items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(
             icon: Icon(Icons.favorite_outline_rounded), label: 'Favourite'),
@@ -161,7 +178,7 @@ class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: Icon(Icons.grid_view_rounded),
       actions: [
         Container(
-          margin: EdgeInsets.only(top: 10, right: 20),
+          margin: const EdgeInsets.all(10.0),
           child: const CircleAvatar(
             backgroundImage: NetworkImage(
               'https://blog.logrocket.com/wp-content/uploads/2022/01/handling-network-connectivity-flutter.png',
@@ -174,5 +191,5 @@ class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(53.0);
+  Size get preferredSize => const Size.fromHeight(53.0);
 }
