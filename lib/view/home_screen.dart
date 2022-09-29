@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/model/playList_model.dart';
 import '../model/song_model.dart';
+import '../widget/playlist_card.dart';
 import '../widget/section_header.dart';
 import '../widget/song_card.dart';
 
@@ -9,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Song> songs = Song.songs;
+    List<Playlist> playList = Playlist.playList;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -35,7 +38,13 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     const SectionHeader(title: 'Playlist'),
                     ListView.builder(
-                        itemCount: 5, itemBuilder: (context, index) {})
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(top: 10),
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: playList.length,
+                        itemBuilder: (context, index) {
+                          return PlaylistCard(playList: playList[index]);
+                        })
                   ],
                 ),
               )
@@ -71,7 +80,7 @@ class _TrendingMusic extends StatelessWidget {
             height: 10.0,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.32,
+            height: MediaQuery.of(context).size.height * 0.30,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: songs.length,

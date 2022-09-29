@@ -42,5 +42,11 @@ class Song {
       url: 'assets/music/Shunno Bedona Acoustic.mp3',
       coverUrl: 'assets/images/play2.jpeg',
     ),
+    Song(
+      title: 'Jarico',
+      description: 'Jarico',
+      url: 'assets/music/Meghborone-Tanjib Sarowar-(MuzicBD.Com).mp3',
+      coverUrl: 'assets/images/play5.jpeg',
+    ),
   ];
 }
